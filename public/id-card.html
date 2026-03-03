@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student ID Card</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="id-card" id="card"></section>
+    <button onclick="window.print()">Print Card</button>
+  </main>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const studentId = params.get('studentId');
+    const token = localStorage.getItem('suAttendToken');
+
+    fetch(`/api/students/${studentId}/card`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then((res) => res.json())
+      .then(({ student }) => {
+        document.getElementById('card').innerHTML = `
+          <h2>SU Attend Student ID</h2>
+          <p><strong>Name:</strong> ${student.fullName}</p>
+          <p><strong>Student #:</strong> ${student.studentNumber}</p>
+          <p><strong>Program:</strong> ${student.program}</p>
+          <p><strong>Intake:</strong> ${student.intakeYear}</p>
+          <p><strong>Email:</strong> ${student.academicEmail}</p>
+        `;
+      });
+  </script>
+</body>
+</html>
