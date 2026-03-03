@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SU Attend</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>SU Attend</h1>
+    <p>Student check-in with instant OTP verification.</p>
+
+    <section class="card">
+      <h2>Student Check-In</h2>
+      <label>Student Number</label>
+      <input id="studentNumber" placeholder="e.g. SU20240100" />
+      <button id="requestOtpBtn">Request OTP</button>
+
+      <label>OTP Code</label>
+      <input id="otp" placeholder="Enter code from SMS" />
+      <label>Session/Period</label>
+      <input id="sessionTag" placeholder="e.g. Morning Lecture" />
+      <button id="verifyOtpBtn">Verify & Check-In</button>
+      <p id="studentMessage"></p>
+    </section>
+
+    <section class="card">
+      <h2>Admin</h2>
+      <p><a href="/admin.html">Open Admin Dashboard</a></p>
+    </section>
+  </main>
+  <script src="/student.js"></script>
+</body>
+</html>
