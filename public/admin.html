@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SU Attend - Admin</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>SU Attend Admin Dashboard</h1>
+
+    <section class="card" id="loginCard">
+      <h2>Admin Login</h2>
+      <input id="username" placeholder="Username" />
+      <input id="password" type="password" placeholder="Password" />
+      <button id="loginBtn">Login</button>
+      <p id="loginMessage"></p>
+    </section>
+
+    <section class="card hidden" id="dashboardCard">
+      <h2>Dashboard</h2>
+      <p id="adminMeta"></p>
+      <div id="summary"></div>
+
+      <h3>Students</h3>
+      <div class="flex-row">
+        <input id="newStudentNumber" placeholder="Student Number" />
+        <input id="newStudentId" placeholder="Student ID" />
+        <input id="newStudentName" placeholder="Full Name" />
+        <input id="newProgram" placeholder="Program" />
+        <input id="newIntake" placeholder="Intake Year" />
+        <input id="newPhone" placeholder="Phone" />
+        <input id="newEmail" placeholder="Academic Email" />
+      </div>
+      <button id="createStudentBtn">Register Student</button>
+      <table id="studentsTable">
+        <thead><tr><th>Name</th><th>Student #</th><th>Program</th><th>Card</th></tr></thead>
+        <tbody></tbody>
+      </table>
+
+      <h3>Attendance Logs</h3>
+      <button id="refreshBtn">Refresh</button>
+      <button id="csvBtn">Export CSV</button>
+      <button id="xlsxBtn">Export Excel</button>
+      <table id="logsTable">
+        <thead><tr><th>Student</th><th>#</th><th>Program</th><th>Time</th><th>Session</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+  <script src="/admin.js"></script>
+</body>
+</html>

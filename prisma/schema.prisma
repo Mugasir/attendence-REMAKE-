@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  LECTURER
+  STAFF
+}
+
+enum OtpStatus {
+  PENDING
+  VERIFIED
+  EXPIRED
+}
+
+model Student {
+  id              String         @id @default(cuid())
+  studentId       String         @unique
+  fullName        String
+  program         String
+  intakeYear      Int
+  studentNumber   String         @unique
+  phoneNumber     String
+  academicEmail   String         @unique
+  avatarUrl       String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  otpCodes        OtpCode[]
+  attendanceLogs  AttendanceLog[]
+}
+
+model Admin {
+  id           String      @id @default(cuid())
+  username     String      @unique
+  fullName     String
+  passwordHash String
+  role         AdminRole
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  attendanceLogs AttendanceLog[] @relation("AuditActor")
+}
+
+model OtpCode {
+  id          String    @id @default(cuid())
+  studentId   String
+  codeHash    String
+  expiresAt   DateTime
+  status      OtpStatus @default(PENDING)
+  createdAt   DateTime  @default(now())
+  verifiedAt  DateTime?
+  student     Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId, status])
+}
+
+model AttendanceLog {
+  id          String   @id @default(cuid())
+  studentId   String
+  adminId     String?
+  checkInAt   DateTime @default(now())
+  sessionTag  String
+  ipAddress   String?
+  student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  admin       Admin?   @relation("AuditActor", fields: [adminId], references: [id])
+
+  @@index([checkInAt])
+  @@index([studentId, checkInAt])
+}
