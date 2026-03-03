@@ -1,0 +1,35 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: su_attend
+      POSTGRES_PASSWORD: su_attend
+      POSTGRES_DB: su_attend
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://su_attend:su_attend@db:5432/su_attend
+      JWT_SECRET: replace-with-strong-secret
+      JWT_EXPIRES_IN: 12h
+      OTP_TTL_MINUTES: 5
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      TWILIO_FROM_NUMBER: ${TWILIO_FROM_NUMBER}
+      SEED_ADMIN_USERNAME: superadmin
+      SEED_ADMIN_PASSWORD: ChangeMe123!
+    ports:
+      - "3000:3000"
+volumes:
+  pgdata:
