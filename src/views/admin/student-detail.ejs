@@ -1,0 +1,29 @@
+<%- include('../partials/head') %>
+<main class="container">
+  <a href="/admin/dashboard">← Back to dashboard</a>
+  <section class="card">
+    <h1><%= student.fullName %></h1>
+    <p><strong>Student #:</strong> <%= student.studentNumber %></p>
+    <p><strong>Program:</strong> <%= student.program %></p>
+    <p><strong>Intake Year:</strong> <%= student.intakeYear %></p>
+    <p><strong>Contact:</strong> <%= student.phoneNumber %></p>
+    <p><strong>Email:</strong> <%= student.academicEmail %></p>
+    <p><a href="/admin/students/<%= student.id %>/card" target="_blank">Open Printable ID Card</a></p>
+  </section>
+
+  <section class="card">
+    <h2>Recent Attendance</h2>
+    <table>
+      <thead><tr><th>Check In</th><th>Check Out</th></tr></thead>
+      <tbody>
+      <% student.sessions.forEach((session) => { %>
+        <tr>
+          <td><%= session.checkInAt.toISOString() %></td>
+          <td><%= session.checkOutAt ? session.checkOutAt.toISOString() : 'ACTIVE' %></td>
+        </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </section>
+</main>
+<%- include('../partials/footer') %>

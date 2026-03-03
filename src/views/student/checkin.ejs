@@ -1,0 +1,46 @@
+<%- include('../partials/head') %>
+<main class="container narrow">
+  <h1>SU Attend</h1>
+  <p>Secure attendance check-in/out using your Student Number + OTP.</p>
+
+  <% if (message) { %><div class="alert success"><%= message %></div><% } %>
+  <% if (error) { %><div class="alert error"><%= error %></div><% } %>
+
+  <section class="card">
+    <h2>Step 1: Request OTP</h2>
+    <form method="post" action="/request-otp">
+      <label>Student Number
+        <input type="text" name="studentNumber" value="<%= requestedStudentNumber || '' %>" required />
+      </label>
+      <label>Action
+        <select name="action" required>
+          <option value="checkin" <%= requestedAction === 'checkin' ? 'selected' : '' %>>Check In</option>
+          <option value="checkout" <%= requestedAction === 'checkout' ? 'selected' : '' %>>Check Out</option>
+        </select>
+      </label>
+      <button type="submit">Send OTP</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Step 2: Verify OTP</h2>
+    <form method="post" action="/verify-otp">
+      <label>Student Number
+        <input type="text" name="studentNumber" value="<%= requestedStudentNumber || '' %>" required />
+      </label>
+      <label>OTP Code
+        <input type="text" name="otpCode" maxlength="6" required />
+      </label>
+      <label>Action
+        <select name="action" required>
+          <option value="checkin">Check In</option>
+          <option value="checkout">Check Out</option>
+        </select>
+      </label>
+      <button type="submit">Verify & Submit Attendance</button>
+    </form>
+  </section>
+
+  <a href="/admin/login">Admin Login</a>
+</main>
+<%- include('../partials/footer') %>

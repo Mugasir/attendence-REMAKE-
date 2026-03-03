@@ -1,0 +1,27 @@
+<%- include('../partials/head') %>
+<main class="container narrow">
+  <section class="card id-card" id="idCard">
+    <h2>SU Attend Student ID</h2>
+    <p><strong>Name:</strong> <%= student.fullName %></p>
+    <p><strong>Student #:</strong> <%= student.studentNumber %></p>
+    <p><strong>Program:</strong> <%= student.program %></p>
+    <p><strong>Intake:</strong> <%= student.intakeYear %></p>
+    <p><strong>Email:</strong> <%= student.academicEmail %></p>
+  </section>
+  <div class="actions">
+    <button onclick="window.print()">Print Card</button>
+    <button id="saveImage">Save as Image</button>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  document.getElementById('saveImage').addEventListener('click', async () => {
+    const card = document.getElementById('idCard');
+    const canvas = await html2canvas(card);
+    const link = document.createElement('a');
+    link.download = '<%= student.studentNumber %>-id-card.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+</script>
+<%- include('../partials/footer') %>

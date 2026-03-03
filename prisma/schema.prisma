@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  LECTURER
+}
+
+model Student {
+  id             String              @id @default(cuid())
+  studentNumber  String              @unique
+  fullName       String
+  program        String
+  intakeYear     Int
+  phoneNumber    String
+  academicEmail  String              @unique
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  otpChallenges  StudentOtpChallenge[]
+  sessions       AttendanceSession[]
+}
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  username     String    @unique
+  passwordHash String
+  fullName     String
+  role         AdminRole @default(ADMIN)
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model StudentOtpChallenge {
+  id         String   @id @default(cuid())
+  studentId  String
+  otpCode    String
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime @default(now())
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId, expiresAt])
+}
+
+model AttendanceSession {
+  id              String   @id @default(cuid())
+  studentId       String
+  checkInAt       DateTime
+  checkOutAt      DateTime?
+  checkInVerified Boolean  @default(true)
+  createdAt       DateTime @default(now())
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId, checkInAt])
+  @@index([checkInAt])
+}

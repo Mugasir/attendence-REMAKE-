@@ -1,0 +1,52 @@
+<%- include('../partials/head') %>
+<main class="container">
+  <header class="topbar">
+    <h1>Dashboard</h1>
+    <div>
+      <span><strong><%= admin.fullName %></strong> (<%= admin.role %>)</span>
+      <form method="post" action="/admin/logout" style="display:inline">
+        <button type="submit">Logout</button>
+      </form>
+    </div>
+  </header>
+
+  <section class="grid-two">
+    <article class="card">
+      <h3>Today's Unique Check-ins</h3>
+      <p class="metric"><%= metrics.checkedInCount %></p>
+    </article>
+    <article class="card">
+      <h3>Exports</h3>
+      <p><a href="/admin/export/csv">Download CSV</a> | <a href="/admin/export/excel">Download Excel</a></p>
+      <% if (admin.role === 'SUPER_ADMIN') { %>
+      <p><a href="/admin/roles/manage">Manage Admin Roles</a></p>
+      <% } %>
+    </article>
+  </section>
+
+  <section class="card">
+    <h2>Today's Sessions</h2>
+    <table>
+      <thead><tr><th>Student</th><th>Check In</th><th>Check Out</th></tr></thead>
+      <tbody>
+      <% metrics.todaysSessions.forEach((session) => { %>
+        <tr>
+          <td><%= session.student.fullName %> (<%= session.student.studentNumber %>)</td>
+          <td><%= session.checkInAt.toISOString() %></td>
+          <td><%= session.checkOutAt ? session.checkOutAt.toISOString() : 'ACTIVE' %></td>
+        </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>Students</h2>
+    <ul>
+      <% students.forEach((student) => { %>
+        <li><a href="/admin/students/<%= student.id %>"><%= student.fullName %></a> - <%= student.program %></li>
+      <% }) %>
+    </ul>
+  </section>
+</main>
+<%- include('../partials/footer') %>
